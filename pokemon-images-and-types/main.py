@@ -1,23 +1,28 @@
-import pandas as pd
-import cv2
-import os
 import pocketNet as pk
 import torch.nn as nn
 import torch
-from PIL import Image
+from torchvision import transforms, datasets
 from pocketmonDataset import pocketmonDataset
+import PIL
 
 root_dir = "images/images"
 
 data_path = "pokemon.csv"
 img_path = "images/images"
 if __name__ == "__main__":
-    # file_list = load_directory(root_dir)
-    # data_list = load_data(file_list)
-    pocketdataset = pocketmonDataset(data_path, img_path)
+    transforms = transforms.Compose([transforms.Resize((224, 224)),
+                                  transforms.ToTensor(),
+                                  transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+                                 ])
+
+    pocketdataset = pocketmonDataset(data_path, img_path, transform = transforms)
     model = pk.pocketNet()
+
+
+
     mn_dataset_loader = torch.utils.data.DataLoader(dataset=pocketdataset,
                                                     batch_size=10,
+
                                                     shuffle=True)
     criterion = nn.CrossEntropyLoss()
     learning_rate = 0.001
@@ -26,7 +31,8 @@ if __name__ == "__main__":
     total_step = pocketdataset.data_len//10+1
     for epoch in range(num_epochs):
         for i, (images, labels) in enumerate(mn_dataset_loader):
-
+            # images.to("cuda")
+            # labels.to("cuda")
 
             # Forward pass
             outputs = model(images)
