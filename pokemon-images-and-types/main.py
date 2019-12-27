@@ -4,6 +4,7 @@ import torch
 from torchvision import transforms, datasets
 from pocketmonDataset import pocketmonDataset
 import PIL
+#dataset source link : https://www.kaggle.com/vishalsubbiah/pokemon-images-and-types/kernels
 
 root_dir = "images/images"
 
@@ -22,7 +23,6 @@ if __name__ == "__main__":
 
     mn_dataset_loader = torch.utils.data.DataLoader(dataset=pocketdataset,
                                                     batch_size=10,
-
                                                     shuffle=True)
     criterion = nn.CrossEntropyLoss()
     learning_rate = 0.001
